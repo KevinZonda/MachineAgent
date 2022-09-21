@@ -1,4 +1,6 @@
-﻿namespace KevinZonda.MachineAgent.ConsoleApp;
+﻿using System.Runtime.InteropServices;
+
+namespace KevinZonda.MachineAgent.ConsoleApp;
 
 internal static class Extensions
 {
@@ -10,5 +12,11 @@ internal static class Extensions
     public static T Null<T>()
     {
         return default;
+    }
+
+    public static bool IsUnix()
+    {
+        return RuntimeInformation.IsOSPlatform(OSPlatform.OSX) ||
+               RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
     }
 }
