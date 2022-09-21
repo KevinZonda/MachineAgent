@@ -19,10 +19,10 @@ internal class ScriptEngineController
         if (code == null || code.Length < 1) return EmptyResult;
 
         var sb = new StringBuilder();
-        ScriptState state = null;
+        var state = Extensions.Null<ScriptState>();
 
-        Script script = null;
-        Exception insideExp = null;
+        var script = Extensions.Null<Script>();
+        var insideExp = Extensions.Null<Exception>();
 
         foreach (var line in code)
         {
@@ -53,7 +53,7 @@ internal class ScriptEngineController
         {
             Script = sb.ToString(),
             Result = state.ReturnValue,
-            Variables = state.Variables.Select(v => new VariableModel { Name = v.Name, Value = v.Value }).ToArray(),
+            Variables = state.Variables.Select(v => new VariableModel(v.Name, v.Value)).ToArray(),
             Exception = state.Exception ?? insideExp
         };
     }
@@ -64,12 +64,25 @@ internal class ScriptEngineController
         public object Result { get; set; }
         public VariableModel[] Variables { get; set; }
         public Exception? Exception { get; set; }
+        public bool IsFailed => Exception != null;
+
 
     }
 
     public class VariableModel
     {
-        public string Name { get; set; }
-        public object Value { get; set; }
+        public string Name { get; }
+        public object Value { get; }
+
+        public VariableModel(string name, object value)
+        {
+            Name = name;
+            Value = value;
+        }
+
+        public override string? ToString()
+        {
+            return $"[Variable]\nName={Name}\nValue={Value}";
+        }
     }
 }
