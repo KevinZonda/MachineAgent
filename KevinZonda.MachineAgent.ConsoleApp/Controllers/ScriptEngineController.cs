@@ -28,27 +28,27 @@ internal class ScriptEngineController
         {
             if (string.IsNullOrWhiteSpace(line)) continue;
             sb.AppendLine(line);
-            
-            if (script == null || state == null)
+            try
             {
-                script = CSharpScript.Create(line);
-                state = await script.RunAsync();
-            }
-            else
-            {
-                try
+                if (script == null || state == null)
+                {
+                    script = CSharpScript.Create(line);
+                    state = await script.RunAsync();
+                }
+                else
                 {
                     state = await state.ContinueWithAsync(line);
                 }
-                catch (Exception ex)
-                {
-                    insideExp = ex;
-                }
+            }
+            catch (Exception ex)
+            {
+                insideExp = ex;
             }
 
-            if (state.Exception != null || insideExp != null) break;
+            if (state == null || state.Exception != null || insideExp != null) break;
         }
         if (state == null) return EmptyResult;
+
         return new ScriptResult
         {
             Script = sb.ToString(),
@@ -63,7 +63,7 @@ internal class ScriptEngineController
         public string Script { get; set; }
         public object Result { get; set; }
         public VariableModel[] Variables { get; set; }
-        public Exception Exception { get; set; }
+        public Exception? Exception { get; set; }
 
     }
 
