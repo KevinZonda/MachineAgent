@@ -1,10 +1,5 @@
 ﻿using Batteryno;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Versioning;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace KevinZonda.MachineAgent.ConsoleApp.Controllers;
 
@@ -21,6 +16,40 @@ internal class BatteryController
             Percentage = bat.Capacity,
             Status = BatteryInfo.Parse(bat.Status)
         };
+    }
+
+    public class BatteryStatusChangedEventArgs
+    {
+        public BatteryInfo.BatteryStatus PrevStatus { get; }
+        public BatteryInfo.BatteryStatus CurrentStatus { get; }
+        public BatteryStatusChangedEventArgs(BatteryInfo.BatteryStatus prevStatus, BatteryInfo.BatteryStatus currentStatus)
+        {
+            PrevStatus = prevStatus;
+            CurrentStatus = currentStatus;
+        }
+    }
+
+    [SupportedOSPlatform("linux")]
+    public static void MonitorBatteryChange(int interval = 1000, Action<BatteryStatusChangedEventArgs> batteryStatusChanged = null)
+    {
+        BatteryInfo.BatteryStatus status = BatteryInfo.BatteryStatus.Unknown;
+        while (true)
+        {
+            try
+            {
+                var info = GetBatteryInfo();
+                if (info == null || !info.IsOk) break;
+                var tmp = status;
+                status = info.Status;
+                if (status != tmp && batteryStatusChanged != null)
+                    batteryStatusChanged(new(tmp, status));
+            }
+            catch
+            {
+                // TODO;
+            }
+            Thread.Sleep(interval);
+        }
     }
 
     public class BatteryInfo

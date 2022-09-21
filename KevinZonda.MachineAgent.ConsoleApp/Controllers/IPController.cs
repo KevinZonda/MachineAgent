@@ -19,6 +19,7 @@ internal class IPController
         if (!resp.IsSuccessStatusCode) return new IPResult() { IsOk = false };
         var content = await resp.Content.ReadAsStringAsync();
         var mod = JsonSerializer.Deserialize<IPSBModel>(content);
+        if (mod == null) return new IPResult() { IsOk = false };
         return new IPResult()
         {
             IsOk = true,
