@@ -19,19 +19,8 @@ internal partial class BatteryController
         };
     }
 
-    public class BatteryStatusChangedEventArgs
-    {
-        public BatteryInfo.BatteryStatus PrevStatus { get; }
-        public BatteryInfo.BatteryStatus CurrentStatus { get; }
-        public BatteryStatusChangedEventArgs(BatteryInfo.BatteryStatus prevStatus, BatteryInfo.BatteryStatus currentStatus)
-        {
-            PrevStatus = prevStatus;
-            CurrentStatus = currentStatus;
-        }
-    }
-
     [SupportedOSPlatform("linux")]
-    public static void MonitorBatteryChange(int interval = 1000, Action<BatteryStatusChangedEventArgs> batteryStatusChanged = null)
+    public static void MonitorBatteryChange(int interval = 1000, Action<(BatteryInfo.BatteryStatus prevStatus, BatteryInfo.BatteryStatus currentStatus)> batteryStatusChanged = null)
     {
         BatteryInfo.BatteryStatus status = BatteryInfo.BatteryStatus.Unknown;
         while (true)
@@ -43,7 +32,7 @@ internal partial class BatteryController
                 var tmp = status;
                 status = info.Status;
                 if (status != tmp && batteryStatusChanged != null)
-                    batteryStatusChanged(new(tmp, status));
+                    batteryStatusChanged((tmp, status));
             }
             catch
             {
