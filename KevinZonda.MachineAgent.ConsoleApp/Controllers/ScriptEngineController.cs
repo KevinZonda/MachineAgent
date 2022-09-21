@@ -1,10 +1,11 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Scripting;
+﻿using KevinZonda.MachineAgent.ConsoleApp.Controllers.Models;
+using Microsoft.CodeAnalysis.CSharp.Scripting;
 using Microsoft.CodeAnalysis.Scripting;
 using System.Text;
 
 namespace KevinZonda.MachineAgent.ConsoleApp.Controllers;
 
-internal class ScriptEngineController
+internal partial class ScriptEngineController
 {
     private static readonly ScriptResult EmptyResult = new ScriptResult
     {
@@ -56,33 +57,5 @@ internal class ScriptEngineController
             Variables = state.Variables.Select(v => new VariableModel(v.Name, v.Value)).ToArray(),
             Exception = state.Exception ?? insideExp
         };
-    }
-
-    public class ScriptResult
-    {
-        public string Script { get; set; }
-        public object Result { get; set; }
-        public VariableModel[] Variables { get; set; }
-        public Exception? Exception { get; set; }
-        public bool IsFailed => Exception != null;
-
-
-    }
-
-    public class VariableModel
-    {
-        public string Name { get; }
-        public object Value { get; }
-
-        public VariableModel(string name, object value)
-        {
-            Name = name;
-            Value = value;
-        }
-
-        public override string? ToString()
-        {
-            return $"[Variable]\nName={Name}\nValue={Value}";
-        }
     }
 }

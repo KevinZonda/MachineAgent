@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics;
 using System.Reflection;
-using Universe.CpuUsage;
 
 namespace KevinZonda.MachineAgent.ConsoleApp.Controllers;
 

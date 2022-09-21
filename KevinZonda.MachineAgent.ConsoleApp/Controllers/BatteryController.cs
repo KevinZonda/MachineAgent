@@ -1,9 +1,10 @@
 ﻿using Batteryno;
+using KevinZonda.MachineAgent.ConsoleApp.Controllers.Models;
 using System.Runtime.Versioning;
 
 namespace KevinZonda.MachineAgent.ConsoleApp.Controllers;
 
-internal class BatteryController
+internal partial class BatteryController
 {
     [SupportedOSPlatform("linux")]
     public static BatteryInfo GetBatteryInfo()
@@ -49,30 +50,6 @@ internal class BatteryController
                 // TODO;
             }
             Thread.Sleep(interval);
-        }
-    }
-
-    public class BatteryInfo
-    {
-        public int Percentage;
-        public bool IsOk;
-        public BatteryStatus Status;
-
-        public enum BatteryStatus
-        {
-            Charging,
-            Discharging,
-            Unknown
-        }
-
-        public static BatteryStatus Parse(Batteryno.BatteryStatus s)
-        {
-            return s switch
-            {
-                Batteryno.BatteryStatus.Charging => BatteryStatus.Charging,
-                Batteryno.BatteryStatus.Discharging => BatteryStatus.Discharging,
-                _ => BatteryStatus.Unknown
-            };
         }
     }
 }

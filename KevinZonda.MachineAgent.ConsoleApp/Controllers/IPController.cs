@@ -1,11 +1,11 @@
-﻿using KevinZonda.MachineAgent.ConsoleApp.Factory;
+﻿using KevinZonda.MachineAgent.ConsoleApp.Controllers.Models;
+using KevinZonda.MachineAgent.ConsoleApp.Factory;
 using System.Text;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace KevinZonda.MachineAgent.ConsoleApp.Controllers;
 
-internal class IPController
+internal partial class IPController
 {
     private static readonly HttpClient _hc;
 
@@ -42,25 +42,5 @@ internal class IPController
         }
         sb.Remove(sb.Length - sep.Length, sep.Length);
         return sb.ToString();
-    }
-
-    private class IPSBModel
-    {
-        [JsonPropertyName("city")]
-        public string City { get; set; }
-        [JsonPropertyName("region")]
-        public string Region { get; set; }
-        [JsonPropertyName("country")]
-        public string Country { get; set; }
-        [JsonPropertyName("ip")]
-        public string IP { get; set; }
-
-    }
-
-    public class IPResult
-    {
-        public bool IsOk { get; init; }
-        public string Addr { get; set; } = "";
-        public string Location { get; set; } = "";
     }
 }
