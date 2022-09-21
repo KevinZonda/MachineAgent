@@ -9,6 +9,8 @@
 
   <ItemGroup>
     <PackageReference Include="Batteryno" Version="2.0.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="4.3.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Scripting" Version="4.3.0" />
   </ItemGroup>
 
 </Project>

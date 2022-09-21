@@ -18,5 +18,4 @@ internal class AboutController
             $"CPU Count: {Environment.ProcessorCount}\n" +
             $"Memory   : {1.0 * proc.PrivateMemorySize64 / 1024 / 1024} MiB";
     }
-
 }
