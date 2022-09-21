@@ -9,11 +9,26 @@ namespace KevinZonda.MachineAgent.ConsoleApp;
 internal class ActionQueue
 {
     private Queue<Action> _todo, _done;
+    private Thread _t;
+    private CancellationTokenSource _source;
+    private CancellationToken _token;
     public int Interval { get; }
 
     public ActionQueue(int interval)
     {
         Interval = interval;
+        // TODO: CTS
+        _source = new();
+        _token = _source.Token;
+        _t = new Thread(new ThreadStart(() =>
+        {
+            while (true)
+            {
+                Produce();
+                Thread.Sleep(Interval);
+            }
+
+        }));
     }
 
     public void Produce()
@@ -36,13 +51,11 @@ internal class ActionQueue
 
     private void Start()
     {
-        while (true)
-        {
-            Produce();
-            Thread.Sleep(Interval);
-        }
-
+        if (IsRunning) return;
+        _t.Start();
     }
+
+    public bool IsRunning => _t.ThreadState == ThreadState.Running;
 
 
 }
