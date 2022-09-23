@@ -4,11 +4,12 @@ namespace KevinZonda.MachineAgent.ConsoleApp;
 
 public class CommandRouter
 {
-    private static ConcurrentDictionary<string, Func<string, string>> _dic = new();
+    private static ConcurrentDictionary<string, Func<string?, string>> _dic = new();
 
-    public static string GetRouteResult(string command, string args)
+    public static async Task<string> GetRouteResult(string command, string? args)
     {
-        if (_dic.TryGetValue(command, out var action)) return action(args);
+        if (_dic.TryGetValue(command, out var action)) 
+            return action(args);
         return "";
     }
 
