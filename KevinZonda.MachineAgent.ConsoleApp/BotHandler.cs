@@ -32,7 +32,7 @@ internal class BotHandler
         var (cmd, args) = ParseMsg(messageText, Shared.Me.Username);
         if (cmd == null) return;
 
-        var txt = await CommandRouter.GetRouteResult(cmd, args);
+        var txt = await CommandRouter.GetRouteResult(cmd, args, update.Message.GetUid());
         if (string.IsNullOrWhiteSpace(txt)) return;
 
         await botClient.SendTextMessageAsync(

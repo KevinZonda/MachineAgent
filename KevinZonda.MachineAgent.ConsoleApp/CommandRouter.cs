@@ -1,18 +1,20 @@
-﻿using System.Collections.Concurrent;
+﻿using KevinZonda.MachineAgent.ConsoleApp.Middleware;
+using System.Collections.Concurrent;
 
 namespace KevinZonda.MachineAgent.ConsoleApp;
 
 public class CommandRouter
 {
-    private static ConcurrentDictionary<string, Func<string?, string>> _dic = new();
+    // command -> args -> uid -> rst
+    private static ConcurrentDictionary<string, Func<string?, long?, string>> _dic = new();
 
-    public static async Task<string> GetRouteResult(string command, string? args)
+    public static async Task<string> GetRouteResult(string command, string? args, long? from)
     {
         if (_dic.TryGetValue(command, out var action))
         {
             try
             {
-                return action(args);
+                return action(args, from);
             }
             catch (Exception ex)
             {
@@ -26,9 +28,15 @@ public class CommandRouter
 
     private static void InitRouter()
     {
-        _dic.TryAdd("info", new(_ => Controllers.SystemInfoController.GetSysInfoMessage()));
-        _dic.TryAdd("about", new(_ => Controllers.AboutController.GetAboutMessage()));
-        _dic.TryAdd("ip", new(_ => Controllers.IPController.GetIPLocation()));
+        _dic.TryAdd("info", new((_, _) => Controllers.SystemInfoController.GetSysInfoMessage()));
+        _dic.TryAdd("about", new((_, _) => Controllers.AboutController.GetAboutMessage()));
+        _dic.TryAdd("ip", new((_, _) => Controllers.IPController.GetIPLocation()));
+        _dic.TryAdd("exec", new((args, from) =>
+        {
+            if (!AuthMiddleware.IsAllowedTgUser(from)) return "Error: Permission denied.";
+            if (args == null) return "Error: Please enter code block";
+            return Controllers.ScriptEngineController.Exec(args.Trim().Split('\n')).Result.ToString();
+        }));
     }
 
     static CommandRouter()

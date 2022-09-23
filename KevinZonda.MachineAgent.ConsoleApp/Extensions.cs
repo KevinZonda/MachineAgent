@@ -1,4 +1,5 @@
 ﻿using System.Runtime.InteropServices;
+using Telegram.Bot.Types;
 
 namespace KevinZonda.MachineAgent.ConsoleApp;
 
@@ -18,5 +19,11 @@ internal static class Extensions
     {
         return RuntimeInformation.IsOSPlatform(OSPlatform.OSX) ||
                RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
+    }
+
+    public static long? GetUid(this Message msg)
+    {
+        if (msg == null || msg.From == null) return null;
+        return msg.From.Id;
     }
 }

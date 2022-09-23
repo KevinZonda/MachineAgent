@@ -7,6 +7,21 @@ public class ScriptResult
     public object Result { get; set; }
     public VariableModel[] Variables { get; set; }
     public Exception? Exception { get; set; }
-    public bool IsFailed => Exception != null;
+    public bool IsOk => Exception == null;
+
+    public override string ToString()
+    {
+        return
+            $"Run Result\n" +
+            $"==========\n" +
+            $"IsOk  : {IsOk}\n" +
+            $"Return: {Result}\n" +
+            $"Except: {ExToStr(Exception)}";
+    }
+    private static string ExToStr(Exception? e)
+    {
+        if (e == null) return "null";
+        return e.Message;
+    }
 }
 

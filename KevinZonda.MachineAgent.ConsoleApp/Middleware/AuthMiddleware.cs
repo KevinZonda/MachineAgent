@@ -4,9 +4,16 @@ namespace KevinZonda.MachineAgent.ConsoleApp.Middleware;
 
 internal class AuthMiddleware
 {
-    public static bool IsAllowedTgUser(Message msg, long uid)
+    public static bool IsAllowedTgUser(Message msg)
     {
-        if (msg.From == null) return false;
-        return msg.From.Id == uid;
+        return IsAllowedTgUser(msg.GetUid());
+    }
+
+    public static bool IsAllowedTgUser(long? fid)
+    {
+        if (!Shared.Config.EnableAuth) return true;
+        if (Shared.Config.Admin.Length < 1) return false;
+        if (fid == null) return false;
+        return Shared.Config.Admin.Contains(fid.Value);
     }
 }

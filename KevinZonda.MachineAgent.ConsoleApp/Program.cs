@@ -11,7 +11,7 @@ Console.WriteLine(AboutController.GetAboutMessage());
 Console.WriteLine("=======================");
 
 Console.WriteLine("Connecting Telegram...");
-await Shared.Init(Config.TgBotToken);
+await Shared.Init();
 
 Console.WriteLine($"Connected. Bot ID={Shared.Me.Id}, Username={Shared.Me.Username}");
 

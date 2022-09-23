@@ -1,6 +1,8 @@
 ﻿namespace KevinZonda.MachineAgent.ConsoleApp;
 
-internal class Config
+internal class ConfigModel
 {
-    public static string TgBotToken { get; }
+    public string TgBotToken { get; set; }
+    public bool EnableAuth { get; set; }
+    public long[] Admin { get; set; }
 }
