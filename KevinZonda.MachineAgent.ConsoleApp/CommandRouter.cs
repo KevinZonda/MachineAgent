@@ -8,8 +8,19 @@ public class CommandRouter
 
     public static async Task<string> GetRouteResult(string command, string? args)
     {
-        if (_dic.TryGetValue(command, out var action)) 
-            return action(args);
+        if (_dic.TryGetValue(command, out var action))
+        {
+            try
+            {
+                return action(args);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Exception Catched: Command: {command}; Args: {args}\nDetails: {ex}");
+                return "Exception detected. Command failed.";
+            }
+        }
+
         return "";
     }
 
