@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 
 namespace KevinZonda.MachineAgent.ConsoleApp.Controllers;
@@ -72,10 +73,11 @@ internal class SystemInfoController
         }
     }
 
-    [SupportedOSPlatform("linux")]
+
     public static string GetSysInfoMessage()
     {
-
+        if (!RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            return "Not available in not Linux";
         return
             $"Sys Info" +
             $"========" +

@@ -66,6 +66,7 @@ async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, Cancel
 
     Console.WriteLine($"Received a '{messageText}' message in chat {chatId}.");
     var (cmd, args) = ParseMsg(messageText, username);
+    if (cmd == null) return;
 
     await botClient.SendTextMessageAsync(
         chatId: chatId,

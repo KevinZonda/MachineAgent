@@ -1,5 +1,6 @@
 ﻿using KevinZonda.MachineAgent.ConsoleApp.Controllers.Models;
 using KevinZonda.MachineAgent.ConsoleApp.Factory;
+using System.Reflection;
 using System.Text;
 using System.Text.Json;
 
@@ -13,7 +14,14 @@ internal partial class IPController
     {
         _hc = HttpClientFactory.GetOne();
     }
-    public static async Task<IPResult> GetIPInfo()
+
+    public static string GetIPLocation()
+    {
+        var rst = GetIPInfoAsync().Result;
+        if (rst == null) return "Request failed.";
+        return $"Location: {rst.Location}";
+    }
+    public static async Task<IPResult> GetIPInfoAsync()
     {
         var resp = await _hc.GetAsync("https://api.ip.sb/geoip");
         if (!resp.IsSuccessStatusCode) return new IPResult() { IsOk = false };
