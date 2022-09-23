@@ -26,6 +26,7 @@ internal class ActionQueue
             {
                 Produce();
                 Thread.Sleep(Interval);
+                ResetQueue();
             }
 
         }));
@@ -41,7 +42,7 @@ internal class ActionQueue
         }
     }
 
-    private void Reset()
+    private void ResetQueue()
     {
         while (_done.Count > 0)
         {
